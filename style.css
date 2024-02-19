@@ -1,0 +1,234 @@
+/*Resetar a margem padrão dos navegadores*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box; /* mantém as medidas através da borda */
+}
+
+/* definindo alguns padrões para facilitar a troca do modo dark para o light*/
+:root {
+  --text-color: white; /* define que tudo que utilizar essa variável, vai usar branco, basta colocar var(--text-color) */
+  --bg-url: url(./assets/bg-mobile.jpg);
+  --stroke-color: border: 1px solid rgba(255, 255, 255, 0.5); /* estava dentro de ul li a em border */
+  --surface-color: rgba(255, 255, 255, 0.1);
+  --surface-color-hover: rgba(255, 255, 255, 0.5);
+  --highlight-color: rgba(255, 255, 255, 0.2);
+  --switch-bg-url: url(./assets/moon-stars.svg);
+}
+
+/* Essa alteração somente é feita em caso de existir a class light */
+.light {
+  --text-color: black;
+  --bg-url: url(./assets/bg-mobile-light.jpg);
+  --stroke-color: rgba(0, 0, 0, 0.5);
+  --surface-color: rgba(0, 0, 0, 0.05);
+  --surface-color-hover: rgba(0, 0, 0, 0.02);
+  --highlight-color: rgba(0, 0, 0, 0.1);
+  --switch-bg-url: url(./assets/sun.svg);
+}
+
+body {
+  /*
+  background-image: url(./assets/bg-mobile.jpg);
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: cover;
+  */
+
+  /* Agrupando todos os backgrounds acima em apenas um, Shorthand. Lembrando que existe a sequência: color image repeat position cover (necessário colocar uma barra) */
+  background: var(--bg-url) no-repeat top center / cover;
+  height: 100vh; /* vh = viewport height */
+}
+
+body * {
+  font-family: "Inter", sans-serif;
+  color: var(--text-color);
+}
+
+/* abaixo usamos o seletor de ID que é o # */
+#container {
+  width: 100%;
+  /* No CSS não é necessário definir a altura, pois ela precisa ser fluída */
+
+  /*border: 1px solid red; é feita somente para visualizar o container de início*/
+
+  /* Fazendo os margins left and right em apenas um.
+  margin-right: auto;
+  margin-left: auto; 
+  */
+
+  /*margin: auto;
+  Como a gente precisa fazer o margin-top de 56px, é ideal fazer o margin como shorthand, seguindo a sequência de relógio: top, right, bottom, left.
+  
+  Se colocar 1 propriedade, será para todos os lados
+  Se colocar 2 propriedades, será a primeira para top-bottom e a segunda right-left
+  Se colocar 3, será a primeira top, a segunda nas laterais e a terceira embaixo.
+  Se colocar 4 segue a sequência relógio explicada acima.
+
+*/
+  max-width: 588px;
+
+  margin: 56px auto 0px;
+  padding: 0 24px;
+}
+
+/* a div é um elemento em block, enquanto que a img é inline. Quando for elemento inline, não é possível aplicar o margin: auto; portanto, devemos mudar o display para block. Outra opção é pegar o elemento pai, se este for block, e fazer um text-align: center. O elemento pai do img é o profile, logo:*/
+
+/* Profile */
+#profile {
+  text-align: center;
+  padding: 24px;
+}
+
+#profile img {
+  /*display: block; Se não tivesse o elemento pai acima, deveria conter esse pedaço*/
+  width: 112px;
+  margin: auto;
+}
+
+#profile p {
+  font-weight: 500;
+  line-height: 24px;
+  margin-top: 8px;
+}
+
+/* Switch */
+
+#switch {
+  position: relative;
+  width: 64px;
+  margin: 4px auto;
+}
+
+#switch button {
+  width: 32px;
+  height: 32px;
+  background: white var(--switch-bg-url) no-repeat center;
+  border: 0;
+  border-radius: 50%;
+  position: absolute; /* ao fazer uma posição absoluta, imediatamente o css faz uma sobreposição de camadas */
+  /* Alinhar o topo */
+  top: 50%;
+  transform: translateY(-50%);
+  /* */
+  left: 0;
+  z-index: 1; /* fazer "subir um andar" no eixo z para ele ficar acima da imagem que está no 0. Ao fazer o elemento subir uma camada, ele pode percorrer toda a viewport, não ficando mais limitado à div na qual ele está inserido. Para sanar esse problema, é necessário relativisar a posição asboluta do botton, para isso, basta colocar um position: relative dentro do swtich*/
+
+  animation: slide-back .4s;
+}
+
+.light #switch button {
+  /*
+  right: 0;
+  left: initial;
+  */
+  /* agora será utilizado a propriedade animation para fazer a transição via deslize */
+  animation: slide-in 0.4s forwards; /* forwards mantém a regra pós transição */
+}
+
+#switch button:hover {
+  outline: 8px solid var(--highlight-color);
+}
+
+#switch span {
+  display: block;
+  width: 64px;
+  height: 24px;
+  /* surface-color-dark-mode */
+  background: var(--surface-color);
+  /* stroke-color-dark-mode */
+  border: 1px solid var(--stroke-color);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-radius: 9999px;
+}
+
+/* links - Lista */
+ul {
+  list-style: none; /* serve para retirar os pontinhos da UL */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 0;
+}
+
+ul li a {
+  display: flex;
+  justify-content: center; /* alinhamento em relação ao eixo x */
+  align-items: center; /* alinhamento em relação ao eixo y */
+
+  padding: 16px 24px;
+
+  background: var(--surface-color);
+  border: 1px solid var(--stroke-color);
+  border-radius: 8px;
+
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px); /* esse blur é para "embaçar" a cor */
+  text-decoration: none; /* serve para retirar o sublinhado do link*/
+  font-weight: 500; /* acima de 400 é considerado bold */
+
+  transition: all 0.2s; /* leve aparição dos efeitos ao carregar a página */
+}
+/*pseudo-selector utilizando o hover - aplica coisas ao passar o mouse em cima*/
+ul li:hover {
+  background: var(--surface-color-hover);
+  border: 1.5px solid var(--text-color);
+}
+/**/
+
+/* RGBA = red, green, blue e alpha. A intensidade varia de 0 a 255, e o alpha significa a transparência, que varia de 0 a 1 - quanto maior, menos transparente é o botão */
+
+/*Social links*/
+#socialmedia {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0;
+  font-size: 40px;
+}
+
+/* alinhando o hover com os ícones */
+#socialmedia a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  transition: background 0.2s;
+  border-radius: 50%; /* 5-% é um circulo perfeito */
+}
+
+#socialmedia a:hover {
+  background: var(--highlight-color);
+}
+
+footer {
+  padding: 24px 0;
+  text-align: center;
+  font-size: 14px;
+}
+
+/*media queries*/
+@media  (min-width: 700px) {
+  :root {
+    --bg-url: url(./assets/bg-desktop.jpg);
+  }
+  .light {
+    --bg-url: url(./assets/bg-desktop-light.jpg);
+  }
+}
+/*Só funcionam quando há a linha abaixo no index do HTML dentro do Head
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+*/
+
+/* animation */
+@keyframes slide-in {
+  from {left: 0;}
+
+  to {left: 50%;}
+}
+@keyframes slide-back {
+  from {left: 50%;}
+
+  to {left: 0;}
+}
+
